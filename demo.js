@@ -220,7 +220,6 @@ function counTime() {
     if (enemySpawSpeed > 250) {
       enemySpawSpeed -= 10;
     }
-    console.log(enemySpawSpeed);
   }, 1000);
 }
 // shooting
