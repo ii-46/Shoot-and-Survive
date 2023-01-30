@@ -241,7 +241,6 @@ window.addEventListener("click", (e) => {
       bulletSpeed
     )
   );
-  console.log(bullets);
 });
 
 function animete() {
@@ -277,7 +276,6 @@ function animete() {
     ) {
       setTimeout(() => {
         bullets.splice(bIndex, 1);
-        console.log(bullets);
       }, 0);
     }
   });
@@ -311,7 +309,6 @@ function animete() {
     ) {
       setTimeout(() => {
         enemies.splice(eIndex, 1);
-        console.log(enemies);
       }, 0);
     }
 
@@ -351,6 +348,13 @@ function drawPlayerStatus() {
   ctx.fillText("current score: " + playerScore.toString(), 50, 60);
   ctx.fillText("best score: " + bestScore.toString(), 50, 80);
   ctx.fillText("time: " + fancyTimeFormat(surviveTime).toString(), 50, 100);
+  // ctx.fillText(
+  //   playerScore.toString(),
+  //   player.x -
+  //     playerSize -
+  //     (playerScore.toString().length < 10 ? 0 : playerScore.toString().length),
+  //   player.y + playerSize + Math.abs(-fontSize)
+  // );
 }
 // controller
 
@@ -409,4 +413,13 @@ function fancyTimeFormat(duration) {
   ret += "" + secs;
 
   return ret;
+}
+
+function LightenDarkenColor(col, amt) {
+  var num = parseInt(col, 16);
+  var r = (num >> 16) + amt;
+  var b = ((num >> 8) & 0x00ff) + amt;
+  var g = (num & 0x0000ff) + amt;
+  var newColor = g | (b << 8) | (r << 16);
+  return newColor.toString(16);
 }
