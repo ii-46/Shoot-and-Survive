@@ -1,10 +1,9 @@
-# Shoot & Survive
+# Shoot & Survive 
+## <a href="https://ii-46.github.io/canvas-game/">Play here</a>
 
 ### Project for Computer graphics (2CW1 - 2022/2023)
 
 main contributer: Mr. Inthava XAIYALOUN
-
-Play: https://ii-46.github.io/canvas-game/
 
 ### external resourse:
 
