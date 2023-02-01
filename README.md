@@ -12,4 +12,4 @@ base tutorial(example code): https://youtu.be/eI9idPTT0c4
 
 background music: Minecraft-Theme.mp3 (https://youtu.be/cjQQ9JYGgTM)
 
-### all others resourse are made by me.
+### all others resourses are made by myself.
