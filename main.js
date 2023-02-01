@@ -6,7 +6,7 @@ const ctx = canvas.getContext("2d");
 const playSoundShoot = new Audio("./res/shoot-ef.mp3");
 const playSoundDie = new Audio("./res/die-ef.mp3");
 const playBackground = new Audio("./res/Minecraft-Theme.mp3");
-// playBackground.play();
+playBackground.play();
 // play button
 const playBtn = document.querySelector("#play_btn");
 playBtn.addEventListener("click", () => {
