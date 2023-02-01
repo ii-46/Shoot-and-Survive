@@ -3,17 +3,20 @@ const canvas = document.querySelector("#game");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
-
+const playSoundShoot = new Audio("./res/shoot-ef.mp3");
+const playSoundDie = new Audio("./res/die-ef.mp3");
+const playBackground = new Audio("./res/Minecraft-Theme.mp3");
+playBackground.play();
 // play button
 const playBtn = document.querySelector("#play_btn");
 playBtn.addEventListener("click", () => {
   const playerNameInput = document.querySelector("#player-name").value.trim();
   if (playerNameInput.length > 0) {
     playerName = playerNameInput;
+    playBackground.pause();
     newGame();
   }
 });
-
 const playAgainBtn = document.querySelector("#play-again_btn");
 playAgainBtn.addEventListener("click", () => {
   newGame();
@@ -115,7 +118,7 @@ const enemies = [];
 const enemiesRandomColor = () => {
   return "#" + Math.floor(Math.random() * 16777215).toString(16);
 };
-const enemyColor = ["#dac01a", "#39a78e", "#fc5185", "#9f0fef", "#016612"]; // custom
+// const enemyColor = ["#dac01a", "#39a78e", "#fc5185", "#9f0fef", "#016612"]; // custom
 const enemySize = {
   min: 10,
   max: 30
@@ -136,7 +139,7 @@ let bulletSpeed = 8;
 // const bulletDramage = bulletSize * 4;
 let bulletDramage = 4;
 let bulletShape = false;
-
+let isGameOver = false;
 function newGame() {
   const mainUI = document.querySelector(".home-menu_container");
   if (!mainUI.classList.contains("hide")) {
@@ -158,6 +161,7 @@ function newGame() {
   bulletSize = 3;
   bulletSpeed = 8;
   bulletDramage = 8;
+  isGameOver = false;
   bulletShape = false;
   spawEnemy();
   counTime();
@@ -189,30 +193,32 @@ function autoHealing() {
 }
 autoHealing();
 function spawEnemy() {
-  setTimeout(() => {
-    const size = Math.floor(
-      Math.random() * (enemySize.max - enemySize.min) + enemySize.min
-    );
-    let x, y;
-    // random spaw positon for enemy
-    if (Math.random() < 0.5) {
-      x = Math.random() < 0.5 ? 0 - size : canvas.width + size;
-      y = Math.random() * canvas.height;
-    } else {
-      x = Math.random() * canvas.width;
-      y = Math.random() < 0.5 ? 0 - size : canvas.height + size;
-    }
-    // const color =
-    //   enemyColor[Math.floor(Math.random() * (enemyColor.length - 1))];
-    const color = enemiesRandomColor();
-    const angle = Math.atan2(player.y - y, player.x - x);
-    const velocity = {
-      x: Math.cos(angle),
-      y: Math.sin(angle)
-    };
-    enemies.push(new Enemy(x, y, size, color, velocity, enemySpeed));
-    spawEnemy();
-  }, enemySpawSpeed);
+  if (!isGameOver) {
+    setTimeout(() => {
+      const size = Math.floor(
+        Math.random() * (enemySize.max - enemySize.min) + enemySize.min
+      );
+      let x, y;
+      // random spaw positon for enemy
+      if (Math.random() < 0.5) {
+        x = Math.random() < 0.5 ? 0 - size : canvas.width + size;
+        y = Math.random() * canvas.height;
+      } else {
+        x = Math.random() * canvas.width;
+        y = Math.random() < 0.5 ? 0 - size : canvas.height + size;
+      }
+      // const color =
+      //   enemyColor[Math.floor(Math.random() * (enemyColor.length - 1))];
+      const color = enemiesRandomColor();
+      const angle = Math.atan2(player.y - y, player.x - x);
+      const velocity = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+      };
+      enemies.push(new Enemy(x, y, size, color, velocity, enemySpeed));
+      spawEnemy();
+    }, enemySpawSpeed);
+  }
 }
 function counTime() {
   setInterval(() => {
@@ -220,7 +226,6 @@ function counTime() {
     if (enemySpawSpeed > 250) {
       enemySpawSpeed -= 10;
     }
-    console.log(enemySpawSpeed);
   }, 1000);
 }
 // shooting
@@ -241,7 +246,8 @@ window.addEventListener("click", (e) => {
       bulletSpeed
     )
   );
-  console.log(bullets);
+
+  playSoundShoot.play();
 });
 
 function animete() {
@@ -277,7 +283,6 @@ function animete() {
     ) {
       setTimeout(() => {
         bullets.splice(bIndex, 1);
-        console.log(bullets);
       }, 0);
     }
   });
@@ -297,6 +302,8 @@ function animete() {
         player.radius -= enemy.radius / enemyDramage;
       } else {
         setTimeout(() => {
+          isGameOver = true;
+          playSoundDie.play();
           gameOver(id);
         }, 0);
       }
@@ -311,7 +318,6 @@ function animete() {
     ) {
       setTimeout(() => {
         enemies.splice(eIndex, 1);
-        console.log(enemies);
       }, 0);
     }
 
@@ -327,6 +333,9 @@ function animete() {
         } else {
           playerScore += enemy.radius;
           setTimeout(() => {
+            const playSoundEnemyDie = new Audio("./res/enemy-die.mp3");
+
+            playSoundEnemyDie.play();
             enemies.splice(eIndex, 1);
             bullets.splice(pIndex, 1);
           }, 0);
@@ -340,7 +349,6 @@ function animete() {
 function drawPlayerStatus() {
   let fontSize = "16";
   ctx.font = `${fontSize}px serif`;
-  // ctx.font = `16px serif`;
   ctx.fillStyle = "#ffffff";
   ctx.fillText(
     playerName,
@@ -351,6 +359,9 @@ function drawPlayerStatus() {
   ctx.fillText("current score: " + playerScore.toString(), 50, 60);
   ctx.fillText("best score: " + bestScore.toString(), 50, 80);
   ctx.fillText("time: " + fancyTimeFormat(surviveTime).toString(), 50, 100);
+  const img = document.createElement("img");
+  img.src = "./res/controller.png";
+  ctx.drawImage(img, 50, canvas.height - 150, 120, 130);
 }
 // controller
 

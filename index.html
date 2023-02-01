@@ -14,12 +14,13 @@
         transition: all 300ms;
       }
       body {
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(3, 8, 35, 0.9);
       }
       #game {
         border: 1px solid green;
         background: rgba(0, 0, 0, 0.5);
-        cursor: crosshair;
+
+        cursor: url("./res/cursor.png"), auto;
       }
       .home-menu_container,
       .game-over_container {
@@ -99,6 +100,16 @@
       .hide {
         display: none;
       }
+
+      .vignette {
+        pointer-events: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-shadow: 0 0 100rem rgba(0, 0, 0, 0.5) inset;
+      }
     </style>
   </head>
   <body>
@@ -129,6 +140,7 @@
         </div>
       </div>
     </div>
+    <div class="vignette"></div>
     <script src="main.js"></script>
   </body>
 </html>
